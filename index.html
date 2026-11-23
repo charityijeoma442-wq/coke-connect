@@ -4,115 +4,112 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="manifest" href="/coke-connect/manifest.json">
+<meta name="theme-color" content="#e4002b">
 <title>Coke Connect</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Arial,sans-serif;background:#f7f7f7;color:#202020}
-header{padding:25px 20px 15px;background:#f7f7f7}
-.logo{color:#e4002b;font-size:25px;font-weight:900}
-.small{color:#777;font-size:14px;margin-top:5px}
-.container{padding:15px 18px 100px}
-.page{display:none}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f6f6f6;color:#222;padding-bottom:80px}
+header{background:#e4002b;color:white;padding:22px;border-radius:0 0 24px 24px}
+header h2{margin:0}
+.page{display:none;padding:20px}
 .page.active{display:block}
-.hero{background:linear-gradient(135deg,#e4002b,#a80020);color:white;padding:27px 22px;border-radius:25px;min-height:200px;box-shadow:0 8px 20px #e4002b22}
-.hero h2{font-size:27px;margin-bottom:12px}
-.hero p{line-height:1.5}
-.hero .big{font-size:65px;text-align:right;margin-top:5px}
-.section-title{margin:25px 0 15px;font-size:20px;font-weight:bold}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
-.drink{background:white;padding:18px 12px;border-radius:20px;text-align:center;box-shadow:0 4px 15px #00000008}
-.drink .emoji{font-size:48px;margin-bottom:10px}
-.drink h3{font-size:17px;margin-bottom:7px}
-.drink p{font-size:13px;color:#777}
-.card{background:white;border-radius:20px;padding:20px;margin-top:18px;box-shadow:0 4px 15px #00000008}
-.card h3{margin-bottom:10px}
-.reward{background:#fff0f2;border-radius:20px;padding:20px;margin-top:20px}
-.reward h3{color:#e4002b;margin-bottom:10px}
-button{border:0;border-radius:14px;padding:14px;background:#e4002b;color:white;font-weight:bold;font-size:15px;width:100%;margin-top:12px}
-nav{position:fixed;bottom:0;left:0;width:100%;display:flex;justify-content:space-around;background:white;padding:10px 4px 15px;border-top:1px solid #eee}
-nav button{background:white;color:#777;width:auto;margin:0;padding:10px 8px;font-size:12px;font-weight:normal}
-nav button.active{color:#e4002b;font-weight:bold}
-.points{font-size:34px;color:#e4002b;font-weight:bold;margin:10px 0}
-input{width:100%;padding:14px;border:1px solid #ddd;border-radius:12px;margin-top:10px;font-size:16px}
+.hero{background:#e4002b;color:white;padding:28px;border-radius:18px;margin-top:18px}
+.card{background:white;padding:18px;border-radius:16px;margin:14px 0;box-shadow:0 3px 12px #00000010}
+button{border:0;background:#e4002b;color:white;padding:12px 18px;border-radius:25px;font-weight:bold}
+input{width:100%;padding:14px;border:1px solid #ddd;border-radius:12px;margin:12px 0}
+.avatar{width:90px;height:90px;background:#ffe1e6;color:#e4002b;border-radius:50%;display:grid;place-items:center;font-size:42px;margin:auto}
+.profile{text-align:center}
+nav{position:fixed;bottom:0;left:0;right:0;background:white;display:flex;justify-content:space-around;padding:12px 4px;box-shadow:0 -2px 12px #00000012}
+nav button{background:transparent;color:#666;padding:8px;font-size:12px}
+nav button.active{color:#e4002b}
 </style>
 </head>
 <body>
-
 <header>
-<div class="logo">🥤 COKE CONNECT</div>
-<div class="small">A refreshing place to explore</div>
+<h2>🥤 Coke Connect</h2>
+<p>Your refreshment community</p>
 </header>
-
-<div class="container">
 
 <section id="home" class="page active">
 <div class="hero">
-<h2>Refresh your day!</h2>
-<p>Discover flavors, explore and enjoy a refreshing experience.</p>
-<div class="big">🥤</div>
+<h1>Refresh your day!</h1>
+<p>Discover your favourite drinks and rewards.</p>
 </div>
-
-<h3 class="section-title">Explore Drinks</h3>
-<div class="grid">
-<div class="drink"><div class="emoji">🥤</div><h3>Coca-Cola</h3><p>Classic refreshment</p></div>
-<div class="drink"><div class="emoji">🍋</div><h3>Lemon</h3><p>Bright and fresh</p></div>
-<div class="drink"><div class="emoji">🧊</div><h3>Zero Sugar</h3><p>Cool and crisp</p></div>
-<div class="drink"><div class="emoji">🍊</div><h3>Orange</h3><p>Fruity vibes</p></div>
-</div>
-
-<div class="reward">
-<h3>🎁 Rewards await!</h3>
-<p>Explore the rewards section and try collecting demo points.</p>
-<button onclick="showPage('rewards')">Explore Rewards</button>
-</div>
+<div class="card"><h3>Welcome to Coke Connect</h3><p>Explore, enjoy and earn demo points.</p></div>
 </section>
 
 <section id="explore" class="page">
-<h2 class="section-title">Explore the collection 🌎</h2>
-<p style="color:#777;margin-bottom:20px">Discover refreshing favorites.</p>
-<div class="grid">
-<div class="drink"><div class="emoji">🥤</div><h3>Coca-Cola</h3><p>Classic</p></div>
-<div class="drink"><div class="emoji">🍋</div><h3>Lemon</h3><p>Fresh</p></div>
-<div class="drink"><div class="emoji">🧊</div><h3>Zero Sugar</h3><p>Crisp</p></div>
-<div class="drink"><div class="emoji">🍊</div><h3>Orange</h3><p>Fruity</p></div>
-</div>
+<h2>Explore Drinks</h2>
+<div class="card">🥤 <b>Coca-Cola</b><p>Classic refreshment.</p></div>
+<div class="card">🍋 <b>Lemon</b><p>A citrus-inspired choice.</p></div>
+<div class="card">🧊 <b>Zero Sugar</b><p>A zero-sugar option.</p></div>
+<div class="card">🍊 <b>Orange</b><p>A fruity choice.</p></div>
 </section>
 
 <section id="rewards" class="page">
-<h2 class="section-title">Your Rewards 🎁</h2>
-<div class="hero">
-<p>Your demo balance</p>
-<div class="points" id="points" style="color:white">120</div>
-<p>POINTS</p>
-</div>
+<h2>My Rewards</h2>
 <div class="card">
-<h3>✨ Collect points</h3>
-<p>Press the button below to add demo points to your balance.</p>
-<button onclick="addPoints()">+10 Demo Points</button>
-</div>
-<div class="reward">
-<h3>🏆 Keep exploring</h3>
-<p>This is a demo reward system for Coke Connect.</p>
+<h3>⭐ Your points</h3>
+<h1 id="points">120</h1>
+<p>Demo points only</p>
+<button onclick="addPoints()">Collect 10 points</button>
 </div>
 </section>
 
 <section id="profile" class="page">
-<h2 class="section-title">Your Profile 👤</h2>
-<div class="card">
-<h3>Personal details</h3>
-<input id="username" placeholder="Enter your name">
-<button onclick="saveName()">Save Name</button>
-<p id="greeting" style="margin-top:15px"></p>
+<div class="card profile">
+<div class="avatar">👤</div>
+<h2 id="displayName">Welcome!</h2>
+<p id="displayUser">@cokeconnect</p>
+<button onclick="editProfile()">Edit Profile</button>
 </div>
 <div class="card">
-<h3>About</h3>
-<p>Coke Connect is an independent Coca-Cola-inspired app concept.</p>
+<h3>Personal details</h3>
+<label>Your name</label>
+<input id="nameInput" placeholder="Enter your name">
+<button onclick="saveName()">Save Name</button>
+</div>
+<div class="card">
+<h3>⭐ My rewards</h3>
+<p>Available points: <b id="profilePoints">120</b></p>
+</div>
+<div class="card">
+<h3>⚙️ Settings</h3>
+<p>Account preferences</p>
+<p>About Coke Connect</p>
+<p>Independent app concept, not affiliated with Coca-Cola.</p>
 </div>
 </section>
 
-</div>
-
 <nav>
 <button id="navhome" class="active" onclick="showPage('home')">🏠<br>Home</button>
-<button id="navexplore" onclick="showPage('explor
+<button id="navexplore" onclick="showPage('explore')">🔎<br>Explore</button>
+<button id="navrewards" onclick="showPage('rewards')">⭐<br>Rewards</button>
+<button id="navprofile" onclick="showPage('profile')">👤<br>Profile</button>
+</nav>
+
+<script>
+let points=120;
+function showPage(page){
+document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+document.getElementById(page).classList.add('active');
+document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+document.getElementById('nav'+page).classList.add('active');
+}
+function addPoints(){
+points+=10;
+document.getElementById('points').textContent=points;
+document.getElementById('profilePoints').textContent=points;
+}
+function saveName(){
+let name=document.getElementById('nameInput').value.trim();
+if(!name){alert('Please enter your name');return;}
+document.getElementById('displayName').textContent=name;
+document.getElementById('displayUser').textContent='@'+name.toLowerCase().replace(/\s+/g,'');
+}
+function editProfile(){
+document.getElementById('nameInput').focus();
+}
+</script>
+</body>
+</html>
