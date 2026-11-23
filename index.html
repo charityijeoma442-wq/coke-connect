@@ -115,28 +115,4 @@ input{width:100%;padding:14px;border:1px solid #ddd;border-radius:12px;margin-to
 
 <nav>
 <button id="navhome" class="active" onclick="showPage('home')">🏠<br>Home</button>
-<button id="navexplore" onclick="showPage('explore')">🌎<br>Explore</button>
-<button id="navrewards" onclick="showPage('rewards')">🎁<br>Rewards</button>
-<button id="navprofile" onclick="showPage('profile')">👤<br>Profile</button>
-</nav>
-
-<script>
-let totalPoints=120;
-function showPage(page){
-document.querySelectorAll('.page').forEach(function(s){s.classList.remove('active')});
-document.getElementById(page).classList.add('active');
-document.querySelectorAll('nav button').forEach(function(b){b.classList.remove('active')});
-document.getElementById('nav'+page).classList.add('active');
-window.scrollTo(0,0);
-}
-function addPoints(){
-totalPoints+=10;
-document.getElementById('points').textContent=totalPoints;
-}
-function saveName(){
-let name=document.getElementById('username').value.trim();
-document.getElementById('greeting').textContent=name?'Welcome, '+name+'! 🎉':'Please enter your name.';
-}
-</script>
-</body>
-</html>
+<button id="navexplore" onclick="showPage('explor
