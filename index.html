@@ -1,41 +1,37 @@
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#e4002b">
 <link rel="manifest" href="/coke-connect/manifest.json">
 <title>Coke Connect</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f6f6f6;color:#222;padding-bottom:85px}
+body{margin:0;font-family:Arial;background:#f5f5f5;color:#222;padding-bottom:85px}
 header{background:#e4002b;color:white;padding:22px;border-radius:0 0 24px 24px}
-header h2{margin:0}
 .page{display:none;padding:18px;animation:fade .3s}
 .page.active{display:block}
 @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.hero{background:linear-gradient(135deg,#e4002b,#9d001e);color:white;padding:28px;border-radius:20px;margin:15px 0}
+.hero{background:linear-gradient(135deg,#e4002b,#99001e);color:white;padding:25px;border-radius:20px;margin:15px 0}
 .card{background:white;padding:18px;border-radius:18px;margin:14px 0;box-shadow:0 4px 14px #0000000c}
-button{border:0;background:#e4002b;color:white;padding:13px 18px;border-radius:25px;font-weight:bold;cursor:pointer}
-button:active{transform:scale(.97)}
-input{width:100%;padding:14px;border:1px solid #ddd;border-radius:12px;margin:10px 0;font-size:16px}
-nav{position:fixed;bottom:0;left:0;right:0;background:white;display:flex;justify-content:space-around;padding:10px 3px;box-shadow:0 -3px 15px #00000015}
+button{border:0;background:#e4002b;color:white;padding:12px 16px;border-radius:25px;font-weight:bold;cursor:pointer}
+input{width:100%;padding:13px;border:1px solid #ddd;border-radius:12px;margin:10px 0;font-size:16px}
+nav{position:fixed;bottom:0;left:0;right:0;background:white;display:flex;justify-content:space-around;padding:10px;box-shadow:0 -3px 15px #00000015}
 nav button{background:transparent;color:#666;padding:8px;font-size:12px}
 nav button.active{color:#e4002b}
 .avatar{width:100px;height:100px;border-radius:50%;background:#ffe1e6;display:grid;place-items:center;font-size:42px;margin:10px auto;overflow:hidden}
 .avatar img{width:100%;height:100%;object-fit:cover}
 .profile{text-align:center}
+.points{font-size:34px;color:#e4002b;font-weight:bold}
 .small{font-size:13px;color:#777}
-.hidden{display:none}
-.drink{font-size:38px}
-.points{font-size:36px;color:#e4002b;font-weight:bold}
-.link{color:#e4002b;text-decoration:underline;cursor:pointer}
+.drink{font-size:40px}
+.qty{display:flex;gap:10px;align-items:center;margin-top:10px}
+.qty button{padding:8px 13px}
 </style>
 </head>
 <body>
-
 <header>
 <h2>🥤 Coke Connect</h2>
 <p>Discover. Refresh. Enjoy.</p>
@@ -44,62 +40,68 @@ nav button.active{color:#e4002b}
 <section id="login" class="page">
 <div class="card">
 <h2>Welcome back!</h2>
-<p>Log in to your demo account.</p>
-<input id="loginEmail" type="email" placeholder="Your email address">
+<input id="loginEmail" type="email" placeholder="Email address">
 <button onclick="login()">Log In</button>
-<p class="small">New here? <span class="link" onclick="showPage('signup')">Create an account</span></p>
+<p class="small">New here? <span onclick="showPage('signup')" style="color:red">Sign Up</span></p>
 </div>
 </section>
 
 <section id="signup" class="page">
 <div class="card">
-<h2>Create your account</h2>
+<h2>Create Account</h2>
 <input id="signupName" placeholder="Your name">
-<input id="signupEmail" type="email" placeholder="Your email address">
+<input id="signupEmail" type="email" placeholder="Email address">
 <button onclick="signup()">Sign Up</button>
-<p class="small">Already registered? <span class="link" onclick="showPage('login')">Log in</span></p>
+<p class="small">Already registered? <span onclick="showPage('login')" style="color:red">Log In</span></p>
 </div>
 </section>
 
 <section id="home" class="page active">
 <div class="hero">
 <h1>Refresh your day!</h1>
-<p>Welcome to your refreshment community.</p>
+<p>Welcome to Coke Connect.</p>
 <button onclick="showPage('explore')">Explore Drinks</button>
 </div>
 <div class="card">
-<h3>Welcome to Coke Connect</h3>
-<p>Discover drink choices and collect demo reward points.</p>
-</div>
-<div class="card">
-<h3>⭐ Your points</h3>
+<h3>⭐ Your Demo Points</h3>
 <div class="points" id="homePoints">120</div>
 <button onclick="showPage('rewards')">View Rewards</button>
+</div>
+<div class="card">
+<h3>🛒 Your Shopping Cart</h3>
+<p id="homeCart">0 items</p>
+<button onclick="showPage('cart')">Open Cart</button>
 </div>
 </section>
 
 <section id="explore" class="page">
 <h2>Explore Drinks</h2>
-<div class="card"><div class="drink">🥤</div><h3>Coca-Cola</h3><p>Classic refreshment.</p></div>
-<div class="card"><div class="drink">🍋</div><h3>Lemon</h3><p>A citrus-inspired choice.</p></div>
-<div class="card"><div class="drink">🧊</div><h3>Zero Sugar</h3><p>A zero-sugar option.</p></div>
-<div class="card"><div class="drink">🍊</div><h3>Orange</h3><p>A fruity choice.</p></div>
+<div id="products"></div>
+</section>
+
+<section id="cart" class="page">
+<h2>🛒 My Cart</h2>
+<div id="cartItems"></div>
+<div class="card">
+<h3>Total: <span id="total">₦0</span></h3>
+<button onclick="checkout()">Checkout Demo</button>
+<button onclick="clearCart()" style="background:#555;margin-left:5px">Clear Cart</button>
+</div>
+<p class="small">This is a demo cart. No real orders or payments are processed.</p>
 </section>
 
 <section id="rewards" class="page">
 <h2>My Rewards ⭐</h2>
 <div class="card">
-<p>Your demo points balance</p>
+<p>Demo points</p>
 <div class="points" id="rewardPoints">120</div>
-<p class="small">These are demonstration points, not redeemable Coca-Cola rewards.</p>
 <button onclick="collectPoints()">Collect 10 Demo Points</button>
 </div>
 <div class="card">
 <h3>Reward levels</h3>
-<p>⭐ Starter: 0–199 points</p>
-<p>🥈 Silver: 200–499 points</p>
-<p>🥇 Gold: 500+ points</p>
-<p class="small">Demo levels only.</p>
+<p>⭐ Starter: 0–199</p>
+<p>🥈 Silver: 200–499</p>
+<p>🥇 Gold: 500+</p>
 </div>
 </section>
 
@@ -108,32 +110,31 @@ nav button.active{color:#e4002b}
 <div class="card profile">
 <div class="avatar" id="avatar">👤</div>
 <h2 id="displayName">Welcome!</h2>
-<p id="displayEmail" class="small">Your account</p>
-<label for="photoInput"><button type="button">Upload Profile Picture</button></label>
+<p id="displayEmail" class="small"></p>
+<label for="photoInput"><button>Upload Profile Picture</button></label>
 <input id="photoInput" type="file" accept="image/*">
 </div>
 <div class="card">
-<h3>Personal details</h3>
+<h3>Personal Details</h3>
 <input id="nameInput" placeholder="Your name">
 <button onclick="saveName()">Save Name</button>
 </div>
 <div class="card">
-<h3>⭐ My points</h3>
+<h3>⭐ My Points</h3>
 <div class="points" id="profilePoints">120</div>
 </div>
 <div class="card">
-<h3>Account</h3>
 <button onclick="logout()">Log Out</button>
 </div>
 <div class="card">
-<h3>About</h3>
-<p>Coke Connect is an independent app concept and is not affiliated with or endorsed by The Coca-Cola Company.</p>
+<p class="small">Independent app concept, not affiliated with or endorsed by Coca-Cola.</p>
 </div>
 </section>
 
 <nav id="navigation">
 <button id="navhome" class="active" onclick="showPage('home')">🏠<br>Home</button>
 <button id="navexplore" onclick="showPage('explore')">🔎<br>Explore</button>
+<button id="navcart" onclick="showPage('cart')">🛒<br>Cart</button>
 <button id="navrewards" onclick="showPage('rewards')">⭐<br>Rewards</button>
 <button id="navprofile" onclick="showPage('profile')">👤<br>Profile</button>
 </nav>
@@ -141,16 +142,89 @@ nav button.active{color:#e4002b}
 <script>
 let points=Number(localStorage.getItem('cokePoints'))||120;
 let account=JSON.parse(localStorage.getItem('cokeAccount')||'null');
+let cart=JSON.parse(localStorage.getItem('cokeCart')||'{}');
+
+const drinks=[
+{name:'Coca-Cola',price:800,emoji:'🥤'},
+{name:'Lemon',price:700,emoji:'🍋'},
+{name:'Zero Sugar',price:800,emoji:'🧊'},
+{name:'Orange',price:700,emoji:'🍊'}
+];
 
 function showPage(page){
 document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
 document.getElementById(page).classList.add('active');
 document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
-if(document.getElementById('nav'+page)){
-document.getElementById('nav'+page).classList.add('active');
+if(document.getElementById('nav'+page))document.getElementById('nav'+page).classList.add('active');
+document.getElementById('navigation').style.display=['login','signup'].includes(page)?'none':'flex';
+if(page==='cart')renderCart();
 }
-document.getElementById('navigation').style.display=
-['login','signup'].includes(page)?'none':'flex';
+
+function renderProducts(){
+let box=document.getElementById('products');
+box.innerHTML='';
+drinks.forEach((d,i)=>{
+box.innerHTML+=`<div class="card">
+<div class="drink">${d.emoji}</div>
+<h3>${d.name}</h3>
+<p>₦${d.price.toLocaleString()}</p>
+<button onclick="addCart(${i})">Add to Cart</button>
+</div>`;
+});
+}
+
+function addCart(i){
+let d=drinks[i];
+cart[d.name]=(cart[d.name]||0)+1;
+saveCart();
+alert(d.name+' added to cart!');
+}
+
+function saveCart(){
+localStorage.setItem('cokeCart',JSON.stringify(cart));
+renderCart();
+}
+
+function renderCart(){
+let box=document.getElementById('cartItems');
+box.innerHTML='';
+let total=0,count=0;
+Object.keys(cart).forEach(name=>{
+let d=drinks.find(x=>x.name===name);
+if(!d||cart[name]<=0)return;
+let subtotal=d.price*cart[name];
+total+=subtotal;
+count+=cart[name];
+box.innerHTML+=`<div class="card">
+<h3>${d.emoji} ${d.name}</h3>
+<p>₦${d.price.toLocaleString()} each</p>
+<div class="qty">
+<button onclick="changeQty('${name}',-1)">−</button>
+<span>${cart[name]}</span>
+<button onclick="changeQty('${name}',1)">+</button>
+</div>
+<p>Subtotal: ₦${subtotal.toLocaleString()}</p>
+</div>`;
+});
+document.getElementById('total').textContent='₦'+total.toLocaleString();
+document.getElementById('homeCart').textContent=count+' items';
+}
+
+function changeQty(name,n){
+cart[name]=(cart[name]||0)+n;
+if(cart[name]<=0)delete cart[name];
+saveCart();
+}
+
+function clearCart(){
+cart={};
+saveCart();
+}
+
+function checkout(){
+if(Object.keys(cart).length===0){alert('Your cart is empty!');return;}
+let summary=Object.entries(cart).map(([name,q])=>name+' x '+q).join('\n');
+alert('Demo order summary:\n\n'+summary+'\n\nTotal: '+document.getElementById('total').textContent+'\n\nNo real order or payment was made.');
 }
 
 function updateDisplay(){
@@ -161,20 +235,16 @@ if(account){
 document.getElementById('displayName').textContent=account.name;
 document.getElementById('displayEmail').textContent=account.email;
 document.getElementById('nameInput').value=account.name;
-if(account.photo){
-document.getElementById('avatar').innerHTML='<img src="'+account.photo+'" alt="Profile picture">';
+if(account.photo)document.getElementById('avatar').innerHTML='<img src="'+account.photo+'" alt="Profile picture">';
 }
-}
+renderCart();
 }
 
 function signup(){
 let name=document.getElementById('signupName').value.trim();
 let email=document.getElementById('signupEmail').value.trim().toLowerCase();
-if(!name||!email||!email.includes('@')){
-alert('Please enter your name and a valid email.');
-return;
-}
-account={name:name,email:email,photo:''};
+if(!name||!email||!email.includes('@')){alert('Enter your name and a valid email.');return;}
+account={name,email,photo:''};
 localStorage.setItem('cokeAccount',JSON.stringify(account));
 updateDisplay();
 showPage('home');
@@ -183,18 +253,15 @@ alert('Demo account created!');
 
 function login(){
 let email=document.getElementById('loginEmail').value.trim().toLowerCase();
-if(!account||email!==account.email){
-alert('No matching demo account. Please sign up first.');
-return;
-}
+if(!account||email!==account.email){alert('No matching demo account. Sign up first.');return;}
 updateDisplay();
 showPage('home');
 }
 
 function saveName(){
-if(!account){alert('Please create an account first.');return;}
+if(!account){alert('Please sign up first.');return;}
 let name=document.getElementById('nameInput').value.trim();
-if(!name){alert('Enter your name first.');return;}
+if(!name){alert('Enter your name.');return;}
 account.name=name;
 localStorage.setItem('cokeAccount',JSON.stringify(account));
 updateDisplay();
@@ -211,17 +278,14 @@ alert('10 demo points collected!');
 document.getElementById('photoInput').addEventListener('change',function(){
 let file=this.files[0];
 if(!file)return;
-if(file.size>1500000){
-alert('Please choose a picture smaller than 1.5 MB.');
-return;
-}
+if(file.size>1500000){alert('Choose a picture smaller than 1.5 MB.');return;}
 let reader=new FileReader();
 reader.onload=function(){
-if(!account){alert('Please create an account first.');return;}
+if(!account){alert('Please sign up first.');return;}
 account.photo=reader.result;
 localStorage.setItem('cokeAccount',JSON.stringify(account));
 updateDisplay();
-alert('Profile picture updated!');
+alert('Picture updated!');
 };
 reader.readAsDataURL(file);
 });
@@ -232,6 +296,7 @@ localStorage.removeItem('cokeAccount');
 showPage('login');
 }
 
+renderProducts();
 updateDisplay();
 if(!account)showPage('login');
 </script>
