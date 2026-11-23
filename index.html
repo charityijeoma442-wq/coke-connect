@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,42 +7,111 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Coke Connect</title>
 <style>
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f4f4f4;color:#222}
-header{background:#c8102e;color:white;padding:20px;font-weight:bold;font-size:22px}
-main{padding:18px;padding-bottom:90px}
-.hero{background:linear-gradient(135deg,#c8102e,#7f001b);color:white;padding:25px;border-radius:20px}
-.hero h1{font-size:32px}
-button{border:0;padding:13px 18px;border-radius:30px;background:#c8102e;color:white;font-weight:bold;cursor:pointer}
-.white{background:white;color:#c8102e}
-.card{background:white;padding:18px;border-radius:16px;margin-top:15px;box-shadow:0 3px 10px #0001}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.item{background:white;padding:18px;border-radius:15px;margin-top:12px}
-nav{position:fixed;bottom:0;left:0;right:0;background:white;display:flex;justify-content:space-around;padding:12px;border-top:1px solid #ddd}
-nav button{background:white;color:#777;padding:8px;font-size:12px}
-nav button.active{color:#c8102e}
-input{width:100%;padding:12px;margin:10px 0;border:1px solid #ddd;border-radius:10px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f5f5f5;color:#222}
+header{background:#e4002b;color:white;padding:30px 20px;border-radius:0 0 25px 25px}
+header h1{font-size:30px;margin-bottom:8px}
+.container{padding:20px;padding-bottom:100px}
+.welcome{margin:20px 0}
+.welcome h2{font-size:24px;margin-bottom:8px}
+.card{background:white;padding:20px;border-radius:18px;margin-bottom:18px;box-shadow:0 3px 12px rgba(0,0,0,.06)}
+.card h3{margin-bottom:10px}
+.drinks{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+.drink{background:white;border-radius:16px;padding:20px 12px;text-align:center;box-shadow:0 3px 10px rgba(0,0,0,.05)}
+.emoji{font-size:40px;margin-bottom:10px}
+button{background:#e4002b;color:white;border:none;padding:13px;border-radius:12px;width:100%;font-size:16px;margin-top:12px}
+.points{font-size:32px;font-weight:bold;color:#e4002b}
+nav{position:fixed;bottom:0;left:0;width:100%;background:white;display:flex;justify-content:space-around;padding:15px 5px;border-top:1px solid #ddd}
+nav button{background:transparent;color:#555;width:auto;margin:0;padding:8px;font-size:13px}
+.page{display:none}
+.page.active{display:block}
+input{width:100%;padding:14px;border:1px solid #ddd;border-radius:12px;margin-top:10px;font-size:16px}
 </style>
 </head>
 <body>
-<header>🥤 COKE CONNECT</header>
-<main id="app"></main>
+<header>
+<h1>🥤 Coke Connect</h1>
+<p>Refresh your day. Connect your world.</p>
+</header>
+
+<div class="container">
+<section id="home" class="page active">
+<div class="welcome">
+<h2>Welcome! 👋</h2>
+<p>Discover your refreshing world.</p>
+</div>
+<div class="card">
+<h3>✨ Refresh your day</h3>
+<p>Explore drinks, discover rewards and enjoy the experience.</p>
+</div>
+<h3 style="margin-bottom:15px">Explore Drinks</h3>
+<div class="drinks">
+<div class="drink"><div class="emoji">🥤</div><h3>Coca-Cola</h3><p>Classic refreshment</p></div>
+<div class="drink"><div class="emoji">🍋</div><h3>Lemon</h3><p>Bright and fresh</p></div>
+<div class="drink"><div class="emoji">🧊</div><h3>Zero Sugar</h3><p>Cool and crisp</p></div>
+<div class="drink"><div class="emoji">🍊</div><h3>Orange</h3><p>Fruity vibes</p></div>
+</div>
+</section>
+
+<section id="explore" class="page">
+<div class="welcome"><h2>Explore 🌎</h2><p>Discover what's refreshing.</p></div>
+<div class="card"><h3>Our Drinks</h3><p>Find your favorite flavor and explore the collection.</p></div>
+<div class="drinks">
+<div class="drink"><div class="emoji">🥤</div>Coca-Cola</div>
+<div class="drink"><div class="emoji">🍋</div>Lemon</div>
+<div class="drink"><div class="emoji">🧊</div>Zero Sugar</div>
+<div class="drink"><div class="emoji">🍊</div>Orange</div>
+</div>
+</section>
+
+<section id="rewards" class="page">
+<div class="welcome"><h2>Rewards 🎁</h2><p>Your points, your journey.</p></div>
+<div class="card">
+<p>Your demo points</p>
+<div class="points" id="points">120 Points</div>
+<p>Collect points in this demo app.</p>
+<button onclick="addPoints()">+10 Demo Points</button>
+</div>
+<div class="card"><h3>🎉 Special reward</h3><p>Keep exploring to build your points.</p></div>
+</section>
+
+<section id="profile" class="page">
+<div class="welcome"><h2>Profile 👤</h2><p>Your personal space.</p></div>
+<div class="card">
+<h3>Your Name</h3>
+<input id="username" placeholder="Enter your name">
+<button onclick="saveName()">Save Name</button>
+<p id="greeting" style="margin-top:15px"></p>
+</div>
+<div class="card"><h3>About Coke Connect</h3><p>An independent Coca-Cola-inspired app concept.</p></div>
+</section>
+</div>
+
 <nav>
-<button onclick="page('home')" id="homebtn">⌂<br>Home</button>
-<button onclick="page('explore')" id="explorebtn">⌕<br>Explore</button>
-<button onclick="page('rewards')" id="rewardsbtn">🎁<br>Rewards</button>
-<button onclick="page('profile')" id="profilebtn">♙<br>Profile</button>
+<button onclick="showPage('home')">🏠 Home</button>
+<button onclick="showPage('explore')">🌎 Explore</button>
+<button onclick="showPage('rewards')">🎁 Rewards</button>
+<button onclick="showPage('profile')">👤 Profile</button>
 </nav>
+
 <script>
-let points=120;
-let username="Guest";
-let app=document.getElementById("app");
-
-function page(p){
-document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
-let btn=document.getElementById(p+"btn");
-if(btn)btn.classList.add("active");
-
-if(p==="home"){
-app.innerHTML=`
-<div class="hero"
+let totalPoints=120;
+function showPage(page){
+document.querySelectorAll('.page').forEach(function(s){s.classList.remove('active')});
+document.getElementById(page).classList.add('active');
+}
+function addPoints(){
+totalPoints+=10;
+document.getElementById('points').textContent=totalPoints+' Points';
+}
+function saveName(){
+let name=document.getElementById('username').value;
+if(name.trim()===''){
+document.getElementById('greeting').textContent='Please enter your name.';
+}else{
+document.getElementById('greeting').textContent='Welcome, '+name+'! 🎉';
+}
+}
+</script>
+</body>
+</html>
