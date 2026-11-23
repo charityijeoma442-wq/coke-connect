@@ -1,87 +1,137 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#e4002b">
+<link rel="manifest" href="/coke-connect/manifest.json">
 <title>Coke Connect</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f6f6f6;color:#222;padding-bottom:80px}
+body{margin:0;font-family:Arial,sans-serif;background:#f6f6f6;color:#222;padding-bottom:85px}
 header{background:#e4002b;color:white;padding:22px;border-radius:0 0 24px 24px}
 header h2{margin:0}
-.page{display:none;padding:20px}
+.page{display:none;padding:18px;animation:fade .3s}
 .page.active{display:block}
-.hero{background:#e4002b;color:white;padding:28px;border-radius:18px;margin-top:18px}
-.card{background:white;padding:18px;border-radius:16px;margin:14px 0;box-shadow:0 3px 12px #00000010}
-button{border:0;background:#e4002b;color:white;padding:12px 18px;border-radius:25px;font-weight:bold}
-input{width:100%;padding:14px;border:1px solid #ddd;border-radius:12px;margin:12px 0}
-.avatar{width:90px;height:90px;background:#ffe1e6;color:#e4002b;border-radius:50%;display:grid;place-items:center;font-size:42px;margin:auto}
-.profile{text-align:center}
-nav{position:fixed;bottom:0;left:0;right:0;background:white;display:flex;justify-content:space-around;padding:12px 4px;box-shadow:0 -2px 12px #00000012}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.hero{background:linear-gradient(135deg,#e4002b,#9d001e);color:white;padding:28px;border-radius:20px;margin:15px 0}
+.card{background:white;padding:18px;border-radius:18px;margin:14px 0;box-shadow:0 4px 14px #0000000c}
+button{border:0;background:#e4002b;color:white;padding:13px 18px;border-radius:25px;font-weight:bold;cursor:pointer}
+button:active{transform:scale(.97)}
+input{width:100%;padding:14px;border:1px solid #ddd;border-radius:12px;margin:10px 0;font-size:16px}
+nav{position:fixed;bottom:0;left:0;right:0;background:white;display:flex;justify-content:space-around;padding:10px 3px;box-shadow:0 -3px 15px #00000015}
 nav button{background:transparent;color:#666;padding:8px;font-size:12px}
 nav button.active{color:#e4002b}
+.avatar{width:100px;height:100px;border-radius:50%;background:#ffe1e6;display:grid;place-items:center;font-size:42px;margin:10px auto;overflow:hidden}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.profile{text-align:center}
+.small{font-size:13px;color:#777}
+.hidden{display:none}
+.drink{font-size:38px}
+.points{font-size:36px;color:#e4002b;font-weight:bold}
+.link{color:#e4002b;text-decoration:underline;cursor:pointer}
 </style>
 </head>
 <body>
+
 <header>
 <h2>🥤 Coke Connect</h2>
-<p>Your refreshment community</p>
+<p>Discover. Refresh. Enjoy.</p>
 </header>
+
+<section id="login" class="page">
+<div class="card">
+<h2>Welcome back!</h2>
+<p>Log in to your demo account.</p>
+<input id="loginEmail" type="email" placeholder="Your email address">
+<button onclick="login()">Log In</button>
+<p class="small">New here? <span class="link" onclick="showPage('signup')">Create an account</span></p>
+</div>
+</section>
+
+<section id="signup" class="page">
+<div class="card">
+<h2>Create your account</h2>
+<input id="signupName" placeholder="Your name">
+<input id="signupEmail" type="email" placeholder="Your email address">
+<button onclick="signup()">Sign Up</button>
+<p class="small">Already registered? <span class="link" onclick="showPage('login')">Log in</span></p>
+</div>
+</section>
 
 <section id="home" class="page active">
 <div class="hero">
 <h1>Refresh your day!</h1>
-<p>Discover your favourite drinks and rewards.</p>
+<p>Welcome to your refreshment community.</p>
+<button onclick="showPage('explore')">Explore Drinks</button>
 </div>
-<div class="card"><h3>Welcome to Coke Connect</h3><p>Explore, enjoy and earn demo points.</p></div>
+<div class="card">
+<h3>Welcome to Coke Connect</h3>
+<p>Discover drink choices and collect demo reward points.</p>
+</div>
+<div class="card">
+<h3>⭐ Your points</h3>
+<div class="points" id="homePoints">120</div>
+<button onclick="showPage('rewards')">View Rewards</button>
+</div>
 </section>
 
 <section id="explore" class="page">
 <h2>Explore Drinks</h2>
-<div class="card">🥤 <b>Coca-Cola</b><p>Classic refreshment.</p></div>
-<div class="card">🍋 <b>Lemon</b><p>A citrus-inspired choice.</p></div>
-<div class="card">🧊 <b>Zero Sugar</b><p>A zero-sugar option.</p></div>
-<div class="card">🍊 <b>Orange</b><p>A fruity choice.</p></div>
+<div class="card"><div class="drink">🥤</div><h3>Coca-Cola</h3><p>Classic refreshment.</p></div>
+<div class="card"><div class="drink">🍋</div><h3>Lemon</h3><p>A citrus-inspired choice.</p></div>
+<div class="card"><div class="drink">🧊</div><h3>Zero Sugar</h3><p>A zero-sugar option.</p></div>
+<div class="card"><div class="drink">🍊</div><h3>Orange</h3><p>A fruity choice.</p></div>
 </section>
 
 <section id="rewards" class="page">
-<h2>My Rewards</h2>
+<h2>My Rewards ⭐</h2>
 <div class="card">
-<h3>⭐ Your points</h3>
-<h1 id="points">120</h1>
-<p>Demo points only</p>
-<button onclick="addPoints()">Collect 10 points</button>
+<p>Your demo points balance</p>
+<div class="points" id="rewardPoints">120</div>
+<p class="small">These are demonstration points, not redeemable Coca-Cola rewards.</p>
+<button onclick="collectPoints()">Collect 10 Demo Points</button>
+</div>
+<div class="card">
+<h3>Reward levels</h3>
+<p>⭐ Starter: 0–199 points</p>
+<p>🥈 Silver: 200–499 points</p>
+<p>🥇 Gold: 500+ points</p>
+<p class="small">Demo levels only.</p>
 </div>
 </section>
 
 <section id="profile" class="page">
+<h2>My Profile</h2>
 <div class="card profile">
-<div class="avatar">👤</div>
+<div class="avatar" id="avatar">👤</div>
 <h2 id="displayName">Welcome!</h2>
-<p id="displayUser">@cokeconnect</p>
-<button onclick="editProfile()">Edit Profile</button>
+<p id="displayEmail" class="small">Your account</p>
+<label for="photoInput"><button type="button">Upload Profile Picture</button></label>
+<input id="photoInput" type="file" accept="image/*">
 </div>
 <div class="card">
 <h3>Personal details</h3>
-<label>Your name</label>
-<input id="nameInput" placeholder="Enter your name">
+<input id="nameInput" placeholder="Your name">
 <button onclick="saveName()">Save Name</button>
 </div>
 <div class="card">
-<h3>⭐ My rewards</h3>
-<p>Available points: <b id="profilePoints">120</b></p>
+<h3>⭐ My points</h3>
+<div class="points" id="profilePoints">120</div>
 </div>
 <div class="card">
-<h3>⚙️ Settings</h3>
-<p>Account preferences</p>
-<p>About Coke Connect</p>
-<p>Independent app concept, not affiliated with Coca-Cola.</p>
+<h3>Account</h3>
+<button onclick="logout()">Log Out</button>
+</div>
+<div class="card">
+<h3>About</h3>
+<p>Coke Connect is an independent app concept and is not affiliated with or endorsed by The Coca-Cola Company.</p>
 </div>
 </section>
 
-<nav>
+<nav id="navigation">
 <button id="navhome" class="active" onclick="showPage('home')">🏠<br>Home</button>
 <button id="navexplore" onclick="showPage('explore')">🔎<br>Explore</button>
 <button id="navrewards" onclick="showPage('rewards')">⭐<br>Rewards</button>
@@ -89,27 +139,101 @@ nav button.active{color:#e4002b}
 </nav>
 
 <script>
-let points=120;
+let points=Number(localStorage.getItem('cokePoints'))||120;
+let account=JSON.parse(localStorage.getItem('cokeAccount')||'null');
+
 function showPage(page){
 document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
 document.getElementById(page).classList.add('active');
 document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+if(document.getElementById('nav'+page)){
 document.getElementById('nav'+page).classList.add('active');
 }
-function addPoints(){
-points+=10;
-document.getElementById('points').textContent=points;
+document.getElementById('navigation').style.display=
+['login','signup'].includes(page)?'none':'flex';
+}
+
+function updateDisplay(){
+document.getElementById('homePoints').textContent=points;
+document.getElementById('rewardPoints').textContent=points;
 document.getElementById('profilePoints').textContent=points;
+if(account){
+document.getElementById('displayName').textContent=account.name;
+document.getElementById('displayEmail').textContent=account.email;
+document.getElementById('nameInput').value=account.name;
+if(account.photo){
+document.getElementById('avatar').innerHTML='<img src="'+account.photo+'" alt="Profile picture">';
 }
+}
+}
+
+function signup(){
+let name=document.getElementById('signupName').value.trim();
+let email=document.getElementById('signupEmail').value.trim().toLowerCase();
+if(!name||!email||!email.includes('@')){
+alert('Please enter your name and a valid email.');
+return;
+}
+account={name:name,email:email,photo:''};
+localStorage.setItem('cokeAccount',JSON.stringify(account));
+updateDisplay();
+showPage('home');
+alert('Demo account created!');
+}
+
+function login(){
+let email=document.getElementById('loginEmail').value.trim().toLowerCase();
+if(!account||email!==account.email){
+alert('No matching demo account. Please sign up first.');
+return;
+}
+updateDisplay();
+showPage('home');
+}
+
 function saveName(){
+if(!account){alert('Please create an account first.');return;}
 let name=document.getElementById('nameInput').value.trim();
-if(!name){alert('Please enter your name');return;}
-document.getElementById('displayName').textContent=name;
-document.getElementById('displayUser').textContent='@'+name.toLowerCase().replace(/\s+/g,'');
+if(!name){alert('Enter your name first.');return;}
+account.name=name;
+localStorage.setItem('cokeAccount',JSON.stringify(account));
+updateDisplay();
+alert('Name saved!');
 }
-function editProfile(){
-document.getElementById('nameInput').focus();
+
+function collectPoints(){
+points+=10;
+localStorage.setItem('cokePoints',points);
+updateDisplay();
+alert('10 demo points collected!');
 }
+
+document.getElementById('photoInput').addEventListener('change',function(){
+let file=this.files[0];
+if(!file)return;
+if(file.size>1500000){
+alert('Please choose a picture smaller than 1.5 MB.');
+return;
+}
+let reader=new FileReader();
+reader.onload=function(){
+if(!account){alert('Please create an account first.');return;}
+account.photo=reader.result;
+localStorage.setItem('cokeAccount',JSON.stringify(account));
+updateDisplay();
+alert('Profile picture updated!');
+};
+reader.readAsDataURL(file);
+});
+
+function logout(){
+account=null;
+localStorage.removeItem('cokeAccount');
+showPage('login');
+}
+
+updateDisplay();
+if(!account)showPage('login');
 </script>
 </body>
 </html>
