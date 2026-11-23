@@ -9,7 +9,7 @@
 <title>Coke Connect</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial;background:#f5f5f5;color:#222;padding-bottom:85px}
+body{margin:0;font-family:Arial;background:#f5f5f5;color:#222;padding-bottom:90px}
 header{background:#e4002b;color:white;padding:22px;border-radius:0 0 24px 24px}
 .page{display:none;padding:18px;animation:fade .3s}
 .page.active{display:block}
@@ -18,8 +18,8 @@ header{background:#e4002b;color:white;padding:22px;border-radius:0 0 24px 24px}
 .card{background:white;padding:18px;border-radius:18px;margin:14px 0;box-shadow:0 4px 14px #0000000c}
 button{border:0;background:#e4002b;color:white;padding:12px 16px;border-radius:25px;font-weight:bold;cursor:pointer}
 input{width:100%;padding:13px;border:1px solid #ddd;border-radius:12px;margin:10px 0;font-size:16px}
-nav{position:fixed;bottom:0;left:0;right:0;background:white;display:flex;justify-content:space-around;padding:10px;box-shadow:0 -3px 15px #00000015}
-nav button{background:transparent;color:#666;padding:8px;font-size:12px}
+nav{position:fixed;bottom:0;left:0;right:0;background:white;display:flex;justify-content:space-around;padding:8px 2px;box-shadow:0 -3px 15px #00000015;flex-wrap:wrap}
+nav button{background:transparent;color:#666;padding:7px 5px;font-size:11px}
 nav button.active{color:#e4002b}
 .avatar{width:100px;height:100px;border-radius:50%;background:#ffe1e6;display:grid;place-items:center;font-size:42px;margin:10px auto;overflow:hidden}
 .avatar img{width:100%;height:100%;object-fit:cover}
@@ -27,8 +27,6 @@ nav button.active{color:#e4002b}
 .points{font-size:34px;color:#e4002b;font-weight:bold}
 .small{font-size:13px;color:#777}
 .drink{font-size:40px}
-.qty{display:flex;gap:10px;align-items:center;margin-top:10px}
-.qty button{padding:8px 13px}
 </style>
 </head>
 <body>
@@ -68,9 +66,14 @@ nav button.active{color:#e4002b}
 <button onclick="showPage('rewards')">View Rewards</button>
 </div>
 <div class="card">
-<h3>🛒 Your Shopping Cart</h3>
+<h3>🛒 Shopping Cart</h3>
 <p id="homeCart">0 items</p>
 <button onclick="showPage('cart')">Open Cart</button>
+</div>
+<div class="card">
+<h3>🔔 Notifications</h3>
+<p id="homeNotif">No new updates</p>
+<button onclick="showPage('notifications')">View Updates</button>
 </div>
 </section>
 
@@ -84,10 +87,15 @@ nav button.active{color:#e4002b}
 <div id="cartItems"></div>
 <div class="card">
 <h3>Total: <span id="total">₦0</span></h3>
-<button onclick="checkout()">Checkout Demo</button>
-<button onclick="clearCart()" style="background:#555;margin-left:5px">Clear Cart</button>
+<button onclick="checkout()">Place Demo Order</button>
+<button onclick="clearCart()" style="background:#555;margin:5px">Clear Cart</button>
 </div>
-<p class="small">This is a demo cart. No real orders or payments are processed.</p>
+<p class="small">Demo orders only. No real payments are processed.</p>
+</section>
+
+<section id="history" class="page">
+<h2>📦 Order History</h2>
+<div id="historyItems"></div>
 </section>
 
 <section id="rewards" class="page">
@@ -103,6 +111,30 @@ nav button.active{color:#e4002b}
 <p>🥈 Silver: 200–499</p>
 <p>🥇 Gold: 500+</p>
 </div>
+</section>
+
+<section id="notifications" class="page">
+<h2>🔔 Notifications</h2>
+<div id="notificationItems"></div>
+<button onclick="clearNotifications()">Clear Updates</button>
+</section>
+
+<section id="admin" class="page">
+<h2>📊 Demo Admin Dashboard</h2>
+<div class="card">
+<h3>Total Demo Orders</h3>
+<div class="points" id="adminOrders">0</div>
+</div>
+<div class="card">
+<h3>Demo Revenue</h3>
+<div class="points" id="adminRevenue">₦0</div>
+<p class="small">Calculated from demo orders only.</p>
+</div>
+<div class="card">
+<h3>Recent Orders</h3>
+<div id="adminOrderList"></div>
+</div>
+<p class="small">This demo dashboard is local to this device and is not secured for real business administration.</p>
 </section>
 
 <section id="profile" class="page">
@@ -132,17 +164,22 @@ nav button.active{color:#e4002b}
 </section>
 
 <nav id="navigation">
-<button id="navhome" class="active" onclick="showPage('home')">🏠<br>Home</button>
+<button id="navhome" onclick="showPage('home')">🏠<br>Home</button>
 <button id="navexplore" onclick="showPage('explore')">🔎<br>Explore</button>
 <button id="navcart" onclick="showPage('cart')">🛒<br>Cart</button>
+<button id="navhistory" onclick="showPage('history')">📦<br>Orders</button>
+<button id="navnotifications" onclick="showPage('notifications')">🔔<br>Updates</button>
 <button id="navrewards" onclick="showPage('rewards')">⭐<br>Rewards</button>
 <button id="navprofile" onclick="showPage('profile')">👤<br>Profile</button>
+<button id="navadmin" onclick="showPage('admin')">📊<br>Admin</button>
 </nav>
 
 <script>
 let points=Number(localStorage.getItem('cokePoints'))||120;
 let account=JSON.parse(localStorage.getItem('cokeAccount')||'null');
 let cart=JSON.parse(localStorage.getItem('cokeCart')||'{}');
+let orders=JSON.parse(localStorage.getItem('cokeOrders')||'[]');
+let notifications=JSON.parse(localStorage.getItem('cokeNotifications')||'[]');
 
 const drinks=[
 {name:'Coca-Cola',price:800,emoji:'🥤'},
@@ -158,6 +195,9 @@ document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'))
 if(document.getElementById('nav'+page))document.getElementById('nav'+page).classList.add('active');
 document.getElementById('navigation').style.display=['login','signup'].includes(page)?'none':'flex';
 if(page==='cart')renderCart();
+if(page==='history')renderHistory();
+if(page==='notifications')renderNotifications();
+if(page==='admin')renderAdmin();
 }
 
 function renderProducts(){
@@ -198,11 +238,9 @@ count+=cart[name];
 box.innerHTML+=`<div class="card">
 <h3>${d.emoji} ${d.name}</h3>
 <p>₦${d.price.toLocaleString()} each</p>
-<div class="qty">
 <button onclick="changeQty('${name}',-1)">−</button>
-<span>${cart[name]}</span>
+<span style="margin:10px">${cart[name]}</span>
 <button onclick="changeQty('${name}',1)">+</button>
-</div>
 <p>Subtotal: ₦${subtotal.toLocaleString()}</p>
 </div>`;
 });
@@ -223,8 +261,59 @@ saveCart();
 
 function checkout(){
 if(Object.keys(cart).length===0){alert('Your cart is empty!');return;}
-let summary=Object.entries(cart).map(([name,q])=>name+' x '+q).join('\n');
-alert('Demo order summary:\n\n'+summary+'\n\nTotal: '+document.getElementById('total').textContent+'\n\nNo real order or payment was made.');
+let total=0;
+let list=[];
+Object.entries(cart).forEach(([name,q])=>{
+let d=drinks.find(x=>x.name===name);
+if(d){total+=d.price*q;list.push({name:name,quantity:q,price:d.price});}
+});
+let order={id:Date.now(),date:new Date().toLocaleString(),items:list,total:total};
+orders.unshift(order);
+localStorage.setItem('cokeOrders',JSON.stringify(orders));
+addNotification('Your demo order #'+order.id+' has been recorded.');
+cart={};
+saveCart();
+renderHistory();
+renderAdmin();
+alert('Demo order saved! You can view it in Order History.');
+showPage('history');
+}
+
+function renderHistory(){
+let box=document.getElementById('historyItems');
+if(!orders.length){box.innerHTML='<div class="card">No orders yet.</div>';return;}
+box.innerHTML=orders.map(o=>`<div class="card">
+<h3>Order #${o.id}</h3>
+<p>${o.date}</p>
+${o.items.map(i=>`<p>${i.name} × ${i.quantity}</p>`).join('')}
+<b>Total: ₦${o.total.toLocaleString()}</b>
+</div>`).join('');
+}
+
+function renderAdmin(){
+document.getElementById('adminOrders').textContent=orders.length;
+let revenue=orders.reduce((sum,o)=>sum+o.total,0);
+document.getElementById('adminRevenue').textContent='₦'+revenue.toLocaleString();
+let box=document.getElementById('adminOrderList');
+box.innerHTML=orders.length?orders.map(o=>`<div class="card"><p>Order #${o.id}</p><p>${o.date}</p><b>₦${o.total.toLocaleString()}</b></div>`).join(''):'No demo orders yet.';
+}
+
+function renderNotifications(){
+let box=document.getElementById('notificationItems');
+box.innerHTML=notifications.length?notifications.map(n=>`<div class="card"><p>🔔 ${n.text}</p><p class="small">${n.date}</p></div>`).join(''):'<div class="card">No notifications yet.</div>';
+document.getElementById('homeNotif').textContent=notifications.length?notifications[0].text:'No new updates';
+}
+
+function addNotification(text){
+notifications.unshift({text:text,date:new Date().toLocaleString()});
+localStorage.setItem('cokeNotifications',JSON.stringify(notifications));
+renderNotifications();
+}
+
+function clearNotifications(){
+notifications=[];
+localStorage.setItem('cokeNotifications','[]');
+renderNotifications();
 }
 
 function updateDisplay(){
@@ -238,6 +327,9 @@ document.getElementById('nameInput').value=account.name;
 if(account.photo)document.getElementById('avatar').innerHTML='<img src="'+account.photo+'" alt="Profile picture">';
 }
 renderCart();
+renderHistory();
+renderAdmin();
+renderNotifications();
 }
 
 function signup(){
@@ -248,6 +340,7 @@ account={name,email,photo:''};
 localStorage.setItem('cokeAccount',JSON.stringify(account));
 updateDisplay();
 showPage('home');
+addNotification('Welcome to Coke Connect!');
 alert('Demo account created!');
 }
 
@@ -272,6 +365,7 @@ function collectPoints(){
 points+=10;
 localStorage.setItem('cokePoints',points);
 updateDisplay();
+addNotification('You collected 10 demo points!');
 alert('10 demo points collected!');
 }
 
