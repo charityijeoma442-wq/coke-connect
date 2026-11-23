@@ -1,0 +1,10 @@
+{
+  "name": "Coke Connect",
+  "short_name": "Coke Connect",
+  "description": "Explore drinks and demo rewards",
+  "start_url": "/coke-connect/",
+  "scope": "/coke-connect/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#e4002b"
+}
