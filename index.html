@@ -1,0 +1,100 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coke Connect</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f4f4f4;color:#222}
+header{background:#c8102e;color:white;padding:20px;font-weight:bold;font-size:22px}
+main{padding:18px;padding-bottom:90px}
+.hero{background:linear-gradient(135deg,#c8102e,#7f001b);color:white;padding:25px;border-radius:20px}
+.hero h1{font-size:32px}
+button{border:0;padding:13px 18px;border-radius:30px;background:#c8102e;color:white;font-weight:bold;cursor:pointer}
+.white{background:white;color:#c8102e}
+.card{background:white;padding:18px;border-radius:16px;margin-top:15px;box-shadow:0 3px 10px #0001}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.item{background:white;padding:18px;border-radius:15px;margin-top:12px}
+nav{position:fixed;bottom:0;left:0;right:0;background:white;display:flex;justify-content:space-around;padding:12px;border-top:1px solid #ddd}
+nav button{background:white;color:#777;padding:8px;font-size:12px}
+nav button.active{color:#c8102e}
+input{width:100%;padding:12px;margin:10px 0;border:1px solid #ddd;border-radius:10px}
+</style>
+</head>
+<body>
+<header>🥤 COKE CONNECT</header>
+<main id="app"></main>
+<nav>
+<button onclick="page('home')" id="homebtn">⌂<br>Home</button>
+<button onclick="page('explore')" id="explorebtn">⌕<br>Explore</button>
+<button onclick="page('rewards')" id="rewardsbtn">🎁<br>Rewards</button>
+<button onclick="page('profile')" id="profilebtn">♙<br>Profile</button>
+</nav>
+<script>
+let points=120;
+let username="Guest";
+let app=document.getElementById("app");
+
+function page(p){
+document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
+let btn=document.getElementById(p+"btn");
+if(btn)btn.classList.add("active");
+
+if(p==="home"){
+app.innerHTML=`
+<div class="hero">
+<p>WELCOME TO COKE CONNECT</p>
+<h1>Refresh your day.</h1>
+<p>Discover something refreshing!</p>
+<button class="white" onclick="page('explore')">EXPLORE NOW</button>
+<div style="font-size:90px;text-align:center">🥤</div>
+</div>
+<div class="grid">
+<div class="item" onclick="page('rewards')"><h2>🎁</h2>Rewards</div>
+<div class="item" onclick="page('explore')"><h2>🧃</h2>Explore</div>
+<div class="item" onclick="page('scan')"><h2>📷</h2>Demo Scan</div>
+<div class="item" onclick="page('profile')"><h2>👤</h2>Profile</div>
+</div>`;
+}
+
+if(p==="explore"){
+app.innerHTML=`
+<h1>Explore Drinks</h1>
+<div class="card"><h2>🥤 Classic Cola</h2><p>Discover a cola-inspired classic.</p></div>
+<div class="card"><h2>🍋 Citrus</h2><p>Explore citrus-flavored drinks.</p></div>
+<div class="card"><h2>🫧 Sparkling</h2><p>Discover fizzy drink experiences.</p></div>
+<div class="card"><button onclick="page('scan')">DEMO QR SCAN</button></div>`;
+}
+
+if(p==="rewards"){
+app.innerHTML=`
+<h1>Your Rewards 🎁</h1>
+<div class="hero"><p>DEMO POINTS</p><h1>${points} Points</h1></div>
+<div class="card"><h3>Daily reward</h3><p>Collect 10 demo points!</p><button onclick="claim()">COLLECT POINTS</button></div>
+<div class="card"><p>Goal: 200 points</p><div style="background:#ddd;border-radius:20px;height:12px"><div style="background:#c8102e;height:12px;width:${Math.min(points/200*100,100)}%;border-radius:20px"></div></div></div>`;
+}
+
+if(p==="profile"){
+app.innerHTML=`
+<h1>Your Profile</h1>
+<div class="card" style="text-align:center"><h1>👤</h1><h2>${username}</h2><p>${points} demo points</p></div>
+<div class="card"><h3>Change name</h3><input id="newname" placeholder="Enter display name"><button onclick="changeName()">SAVE NAME</button></div>
+<div class="card"><p>About Coke Connect</p><p>This is an independent app concept.</p></div>`;
+}
+
+if(p==="scan"){
+app.innerHTML=`
+<h1>Demo QR Scanner 📷</h1>
+<div class="card" style="text-align:center"><div style="font-size:100px">▦</div><p>This is a simulated scan.</p><button onclick="scan()">SIMULATE SCAN</button><p id="msg"></p></div>`;
+}
+}
+
+function claim(){points+=10;page("rewards");}
+function scan(){points+=10;page("scan");document.getElementById("msg").innerText="Success! You earned 10 demo points! Total: "+points;}
+function changeName(){let n=document.getElementById("newname").value.trim();if(n){username=n;page("profile");}}
+page("home");
+</script>
+</body>
+</html>
