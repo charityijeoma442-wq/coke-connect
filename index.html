@@ -313,6 +313,18 @@ let contactBtn=document.createElement("button");
 contactBtn.textContent="Contact";
 contactBtn.onclick=()=>showPage("contact");
 document.querySelector("nav").appendChild(contactBtn);
+  let shareBtn=document.createElement("button");
+shareBtn.className="action";
+shareBtn.textContent="📤 Share App";
+shareBtn.onclick=async()=>{
+let link="https://charityijeoma442-wq.github.io/coke-connect/";
+if(navigator.share){
+await navigator.share({title:"Coke Connect",text:"Check out my Coke Connect demo app!",url:link});
+}else{
+prompt("Copy this app link:",link);
+}
+};
+document.getElementById("home").appendChild(shareBtn);
 render();
 </script>
 </body>
