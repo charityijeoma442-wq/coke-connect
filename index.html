@@ -28,13 +28,28 @@ main{max-width:900px;margin:auto;padding:16px}
 .product h3{margin:10px 0}
 .product p{color:#c90020;font-weight:bold}
 .section-title{margin:18px 0}
-input{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin:8px 0}
+input,select{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;margin:8px 0}
 .avatar{width:100px;height:100px;object-fit:cover;border-radius:50%}
 .small{font-size:12px;color:#666}
 footer{text-align:center;padding:20px;font-size:12px;color:#777}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 15px}
+.filters button{border:0;background:#eee;padding:10px 14px;border-radius:20px}
+.filters button.active{background:#c90020;color:white}
+.heart{border:0;background:#fff;font-size:25px;cursor:pointer}
+#intro{position:fixed;inset:0;background:#c90020;color:white;z-index:100;display:flex;align-items:center;justify-content:center;text-align:center;flex-direction:column;animation:introFade 2.5s forwards}
+#intro h1{font-size:40px;animation:introZoom 1s}
+#intro p{margin-top:12px}
+@keyframes introZoom{from{transform:scale(.5);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes introFade{0%,75%{opacity:1}100%{opacity:0;visibility:hidden;pointer-events:none}}
 </style>
 </head>
 <body>
+
+<div id="intro">
+<h1>🥤 Coke Connect</h1>
+<p>Refreshing your experience...</p>
+</div>
+
 <header>
 <h1>🥤 Coke Connect</h1>
 <p>Discover your favourite drinks</p>
@@ -43,6 +58,7 @@ footer{text-align:center;padding:20px;font-size:12px;color:#777}
 <nav>
 <button class="active" onclick="showPage('home')">Home</button>
 <button onclick="showPage('explore')">Explore</button>
+<button onclick="showPage('favorites')">❤️ Favourites</button>
 <button onclick="showPage('cart')">Cart</button>
 <button onclick="showPage('history')">Orders</button>
 <button onclick="showPage('notifications')">Updates</button>
@@ -69,8 +85,15 @@ footer{text-align:center;padding:20px;font-size:12px;color:#777}
 </section>
 
 <section class="page" id="explore">
-<h2 class="section-title">Our Drinks</h2>
+<h2 class="section-title">Explore Drinks</h2>
+<input id="searchBox" placeholder="🔍 Search drinks..." oninput="renderProducts()">
+<div class="filters" id="filters"></div>
 <div class="grid" id="products"></div>
+</section>
+
+<section class="page" id="favorites">
+<h2 class="section-title">❤️ My Favourites</h2>
+<div class="grid" id="favoriteProducts"></div>
 </section>
 
 <section class="page" id="cart">
@@ -120,12 +143,12 @@ footer{text-align:center;padding:20px;font-size:12px;color:#777}
 
 <script>
 const items=[
-{name:"Coca-Cola",price:700,image:"https://images.unsplash.com/photo-1554866585-cd94860890b7?auto=format&fit=crop&w=500&q=80"},
-{name:"Fanta",price:650,image:"https://images.unsplash.com/photo-1624517452488-04869289c4ca?auto=format&fit=crop&w=500&q=80"},
-{name:"Sprite",price:650,image:"https://images.unsplash.com/photo-1629203851122-3726ecdf080e?auto=format&fit=crop&w=500&q=80"},
-{name:"Water",price:500,image:"https://images.unsplash.com/photo-1564419320461-6870880221ad?auto=format&fit=crop&w=500&q=80"},
-{name:"Juice",price:800,image:"https://images.unsplash.com/photo-1600271886742-f049cd451bba?auto=format&fit=crop&w=500&q=80"},
-{name:"Cola Zero",price:700,image:"https://images.unsplash.com/photo-1581636625402-29b2a704ef13?auto=format&fit=crop&w=500&q=80"}
+{name:"Coca-Cola",price:700,category:"Cola",image:"https://images.unsplash.com/photo-1554866585-cd94860890b7?auto=format&fit=crop&w=500&q=80"},
+{name:"Fanta",price:650,category:"Orange",image:"https://images.unsplash.com/photo-1624517452488-04869289c4ca?auto=format&fit=crop&w=500&q=80"},
+{name:"Sprite",price:650,category:"Lemon",image:"https://images.unsplash.com/photo-1629203851122-3726ecdf080e?auto=format&fit=crop&w=500&q=80"},
+{name:"Water",price:500,category:"Water",image:"https://images.unsplash.com/photo-1564419320461-6870880221ad?auto=format&fit=crop&w=500&q=80"},
+{name:"Juice",price:800,category:"Juice",image:"https://images.unsplash.com/photo-1600271886742-f049cd451bba?auto=format&fit=crop&w=500&q=80"},
+{name:"Cola Zero",price:700,category:"Cola",image:"https://images.unsplash.com/photo-1581636625402-29b2a704ef13?auto=format&fit=crop&w=500&q=80"}
 ];
 
 let cart=JSON.parse(localStorage.getItem("cokeCart")||"[]");
@@ -133,6 +156,8 @@ let orders=JSON.parse(localStorage.getItem("cokeOrders")||"[]");
 let notes=JSON.parse(localStorage.getItem("cokeNotifications")||"[]");
 let points=Number(localStorage.getItem("cokePoints")||0);
 let account=JSON.parse(localStorage.getItem("cokeAccount")||"{}");
+let favorites=JSON.parse(localStorage.getItem("cokeFavorites")||"[]");
+let selectedCategory="All";
 
 function save(){
 localStorage.setItem("cokeCart",JSON.stringify(cart));
@@ -140,6 +165,7 @@ localStorage.setItem("cokeOrders",JSON.stringify(orders));
 localStorage.setItem("cokeNotifications",JSON.stringify(notes));
 localStorage.setItem("cokePoints",points);
 localStorage.setItem("cokeAccount",JSON.stringify(account));
+localStorage.setItem("cokeFavorites",JSON.stringify(favorites));
 }
 
 function showPage(id){
@@ -153,8 +179,10 @@ render();
 }
 
 function productCard(p,i){
+let fav=favorites.includes(p.name);
 return `<div class="product">
 <img src="${p.image}" alt="${p.name}" onerror="this.src='https://placehold.co/400x300?text=Drink'">
+<button class="heart" onclick="toggleFavorite('${p.name}')">${fav?"❤️":"🤍"}</button>
 <h3>${p.name}</h3>
 <p>₦${p.price.toLocaleString()}</p>
 <button class="action" onclick="addCart(${i})">Add to Cart</button>
@@ -162,8 +190,31 @@ return `<div class="product">
 }
 
 function renderProducts(){
-document.getElementById("products").innerHTML=items.map(productCard).join("");
-document.getElementById("homeProducts").innerHTML=items.slice(0,3).map(productCard).join("");
+let query=(document.getElementById("searchBox")?.value||"").toLowerCase();
+let filtered=items.filter(p=>(selectedCategory==="All"||p.category===selectedCategory)&&p.name.toLowerCase().includes(query));
+document.getElementById("products").innerHTML=filtered.length?filtered.map(p=>productCard(p,items.indexOf(p))).join():"<p>No drinks found.</p>";
+}
+
+function renderFilters(){
+let cats=["All","Cola","Orange","Lemon","Water","Juice"];
+document.getElementById("filters").innerHTML=cats.map(c=>`<button class="${selectedCategory===c?"active":""}" onclick="setCategory('${c}')">${c}</button>`).join("");
+}
+function setCategory(c){selectedCategory=c;renderFilters();renderProducts();}
+
+function renderHome(){
+document.getElementById("homeProducts").innerHTML=items.slice(0,3).map(p=>productCard(p,items.indexOf(p))).join("");
+}
+
+function renderFavorites(){
+let box=document.getElementById("favoriteProducts");
+let favItems=items.filter(p=>favorites.includes(p.name));
+box.innerHTML=favItems.length?favItems.map(p=>productCard(p,items.indexOf(p))).join():"<div class='card'>You haven't saved any favourites yet.</div>";
+}
+
+function toggleFavorite(name){
+if(favorites.includes(name))favorites=favorites.filter(x=>x!==name);
+else favorites.push(name);
+save();render();
 }
 
 function addCart(i){
@@ -223,7 +274,7 @@ save();renderNotifications();
 }
 function renderNotifications(){
 let box=document.getElementById("notificationContent");
-box.innerHTML=notes.length?notes.map(n=>`<div class="card"><p>${n.msg}</p><p class="small">${n.date}</p></div>`).join(""):"<div class='card'>No updates.</div>";
+box.innerHTML=notes.length?notes.map(n=>`<div class="card"><p>${n.msg}</p><p class="small">${n.date}</p></div>`).join():"<div class='card'>No updates.</div>";
 }
 function clearNotifications(){notes=[];save();renderNotifications();}
 
@@ -245,12 +296,14 @@ document.getElementById("adminPoints").textContent=points;
 }
 
 function render(){
-renderProducts();renderCart();renderHistory();renderNotifications();renderAdmin();
+renderProducts();renderFilters();renderHome();renderFavorites();
+renderCart();renderHistory();renderNotifications();renderAdmin();
 document.getElementById("pointsDisplay").textContent=points+" points";
 document.getElementById("homePoints").textContent=points+" points";
 document.getElementById("profileName").value=account.name||"";
 document.getElementById("avatar").src=account.photo||"https://placehold.co/100x100?text=Profile";
 }
+
 render();
 </script>
 </body>
