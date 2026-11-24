@@ -304,6 +304,15 @@ document.getElementById("profileName").value=account.name||"";
 document.getElementById("avatar").src=account.photo||"https://placehold.co/100x100?text=Profile";
 }
 
+  let contact=document.createElement("section");
+contact.className="page";
+contact.id="contact";
+contact.innerHTML='<div class="card"><h3>Contact Us</h3><p>Welcome to Coke Connect!</p><p>For questions or support, contact the app owner.</p><p>This is an independent demo app.</p></div>';
+document.querySelector("main").appendChild(contact);
+let contactBtn=document.createElement("button");
+contactBtn.textContent="Contact";
+contactBtn.onclick=()=>showPage("contact");
+document.querySelector("nav").appendChild(contactBtn);
 render();
 </script>
 </body>
