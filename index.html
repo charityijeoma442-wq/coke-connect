@@ -217,6 +217,7 @@ else favorites.push(name);
 save();render();
 }
 
+
 function addCart(i){
 let found=cart.find(x=>x.name===items[i].name);
 if(found)found.qty++;
@@ -224,7 +225,6 @@ else cart.push({...items[i],qty:1});
 save();renderCart();
 addNotification(items[i].name+" added to your cart.");
 }
-
 function renderCart(){
 let box=document.getElementById("cartContent");
 if(!cart.length){box.innerHTML="<div class='card'>Your cart is empty.</div>";return;}
