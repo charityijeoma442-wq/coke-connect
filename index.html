@@ -9,19 +9,16 @@
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial,sans-serif;background:#f5f5f5;color:#222}
 header{background:#c8102e;color:white;padding:18px;text-align:center}
-header h1{margin:0}
 nav{display:flex;overflow-x:auto;background:#a50020;padding:8px;gap:6px}
 nav button{background:white;color:#c8102e;border:0;padding:10px;border-radius:20px;white-space:nowrap;font-weight:bold}
-nav button:hover{background:#ffe4e8}
 main{padding:15px}
 section{display:none}
 section.active{display:block}
-.card{background:white;padding:15px;margin:12px 0;border-radius:12px;box-shadow:0 2px 6px #0001}
+.card,.product{background:white;padding:15px;margin:12px 0;border-radius:12px;box-shadow:0 2px 6px #0001}
 button{cursor:pointer;border:0;padding:10px 14px;border-radius:8px;background:#c8102e;color:white;margin:4px}
 input{width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:8px}
-.product{background:white;padding:15px;border-radius:12px;margin:12px 0}
 .price{color:#c8102e;font-weight:bold}
-img{max-width:100%}
+.product img{width:100%;height:220px;object-fit:contain;background:#fff5f5;border-radius:10px}
 .avatar{width:110px;height:110px;border-radius:50%;object-fit:cover;border:3px solid #c8102e}
 footer{text-align:center;padding:15px;color:#777}
 </style>
@@ -65,7 +62,7 @@ footer{text-align:center;padding:15px;color:#777}
 <section id="updates">
 <div class="card">
 <h2>Updates</h2>
-<p>Welcome to Coke Connect. Explore our demo products and enjoy the experience!</p>
+<p>Welcome to Coke Connect. Explore our demo products!</p>
 </div>
 </section>
 
@@ -84,7 +81,6 @@ footer{text-align:center;padding:15px;color:#777}
 <div class="card">
 <h2>Rewards</h2>
 <p>Your points: <strong id="points">0</strong></p>
-<p>Demo points are earned when you place an order.</p>
 </div>
 </section>
 
@@ -93,7 +89,7 @@ footer{text-align:center;padding:15px;color:#777}
 
 <div class="card" style="text-align:center">
 <img id="avatar" class="avatar" src="https://placehold.co/110x110?text=Profile" alt="Profile picture">
-<p><label for="photo">Change profile picture</label></p>
+<p>Change profile picture</p>
 <input id="photo" type="file" accept="image/*" onchange="uploadPhoto(event)">
 </div>
 
@@ -134,7 +130,6 @@ footer{text-align:center;padding:15px;color:#777}
 <section id="contact">
 <div class="card">
 <h2>Contact</h2>
-<p>Contact section for the Coke Connect demo.</p>
 <input id="contactName" placeholder="Your name">
 <input id="contactMessage" placeholder="Your message">
 <button onclick="contactSend()">Send Message</button>
@@ -151,12 +146,12 @@ footer{text-align:center;padding:15px;color:#777}
 
 <script>
 const productsList=[
-{id:1,name:"Coca-Cola",price:1000},
-{id:2,name:"Fanta",price:900},
-{id:3,name:"Sprite",price:900},
-{id:4,name:"Coca-Cola Zero",price:1000},
-{id:5,name:"Schweppes",price:1200},
-{id:6,name:"Water",price:500}
+{id:1,name:"Coca-Cola",price:1000,img:"https://placehold.co/600x400/c8102e/ffffff?text=Coca-Cola"},
+{id:2,name:"Fanta",price:900,img:"https://placehold.co/600x400/ff8800/ffffff?text=Fanta"},
+{id:3,name:"Sprite",price:900,img:"https://placehold.co/600x400/009944/ffffff?text=Sprite"},
+{id:4,name:"Coca-Cola Zero",price:1000,img:"https://placehold.co/600x400/222222/ffffff?text=Coke+Zero"},
+{id:5,name:"Schweppes",price:1200,img:"https://placehold.co/600x400/ffcc00/222222?text=Schweppes"},
+{id:6,name:"Water",price:500,img:"https://placehold.co/600x400/99ddff/222222?text=Water"}
 ];
 
 function get(key,defaultValue){
@@ -181,6 +176,7 @@ box.innerHTML="";
 productsList.forEach(p=>{
 box.innerHTML+=`
 <div class="product">
+<img src="${p.img}" alt="${p.name}" loading="lazy" onerror="this.src='https://placehold.co/600x400?text=Product+Image'">
 <h3>${p.name}</h3>
 <p class="price">₦${p.price.toLocaleString()}</p>
 <button onclick="addCart(${p.id})">Add to Cart</button>
@@ -245,11 +241,7 @@ function checkout(){
 let cart=get("cokeCart",[]);
 if(!cart.length){alert("Your cart is empty.");return;}
 let orders=get("cokeOrders",[]);
-orders.push({
-items:cart,
-date:new Date().toLocaleString(),
-status:"Pending"
-});
+orders.push({items:cart,date:new Date().toLocaleString(),status:"Pending"});
 set("cokeOrders",orders);
 set("cokeCart",[]);
 set("cokePoints",get("cokePoints",0)+10);
@@ -295,8 +287,7 @@ function signup(){
 let name=document.getElementById("signupName").value.trim();
 let email=document.getElementById("signupEmail").value.trim();
 if(!name||!email){alert("Enter your name and email.");return;}
-let account={name,email};
-set("cokeAccount",account);
+set("cokeAccount",{name,email});
 set("cokeDemoSession",true);
 updateProfile();
 alert("Demo account created!");
@@ -323,10 +314,8 @@ alert("Logged out.");
 function updateProfile(){
 let account=get("cokeAccount",null);
 let logged=get("cokeDemoSession",false);
-document.getElementById("profileName").textContent=
-"Name: "+(logged&&account?account.name:"Guest");
-document.getElementById("profileEmail").textContent=
-"Email: "+(logged&&account?account.email:"Not signed in");
+document.getElementById("profileName").textContent="Name: "+(logged&&account?account.name:"Guest");
+document.getElementById("profileEmail").textContent="Email: "+(logged&&account?account.email:"Not signed in");
 document.getElementById("avatar").src=get("cokePhoto","https://placehold.co/110x110?text=Profile");
 }
 
@@ -358,8 +347,7 @@ document.getElementById("points").textContent=get("cokePoints",0);
 
 function renderAdmin(){
 document.getElementById("adminOrders").textContent=get("cokeOrders",[]).length;
-document.getElementById("adminCart").textContent=
-get("cokeCart",[]).reduce((sum,i)=>sum+i.qty,0);
+document.getElementById("adminCart").textContent=get("cokeCart",[]).reduce((sum,i)=>sum+i.qty,0);
 }
 
 function contactSend(){
