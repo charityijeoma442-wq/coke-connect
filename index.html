@@ -3,32 +3,45 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Coke Connect</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f5f5f5;color:#222}
+body{margin:0;font-family:Arial,sans-serif;background:#f6f6f6;color:#222}
 header{background:#c8102e;color:white;padding:18px;text-align:center}
-nav{display:flex;overflow-x:auto;background:#a50020;padding:8px;gap:6px}
-nav button{background:white;color:#c8102e;border:0;padding:10px;border-radius:20px;white-space:nowrap;font-weight:bold}
-main{padding:15px}
+header h1{margin:0;font-size:25px}
+header p{margin:5px 0 0;font-size:13px}
+nav{display:flex;flex-wrap:wrap;justify-content:center;background:white;padding:10px;gap:7px;box-shadow:0 2px 5px #ddd}
+nav button{border:0;background:#f1f1f1;padding:9px 12px;border-radius:20px;font-weight:bold;cursor:pointer}
+nav button:hover{background:#c8102e;color:white}
+main{max-width:900px;margin:auto;padding:15px}
 section{display:none}
 section.active{display:block}
-.card,.product{background:white;padding:15px;margin:12px 0;border-radius:12px;box-shadow:0 2px 6px #0001}
-button{cursor:pointer;border:0;padding:10px 14px;border-radius:8px;background:#c8102e;color:white;margin:4px}
-input{width:100%;padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:8px}
-.price{color:#c8102e;font-weight:bold}
-.product img{width:100%;height:240px;object-fit:contain;background:white;border-radius:10px}
-.avatar{width:110px;height:110px;border-radius:50%;object-fit:cover;border:3px solid #c8102e}
-footer{text-align:center;padding:15px;color:#777}
-h2{color:#c8102e}
+.hero{background:#c8102e;color:white;border-radius:15px;padding:24px;text-align:center;margin-bottom:20px}
+.hero h2{margin-top:0}
+.section-title{margin:20px 0 12px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.product-card{background:white;border:1px solid #eee;border-radius:13px;padding:12px;box-shadow:0 2px 8px rgba(0,0,0,.05);text-align:center}
+.product-card img{width:100%;height:140px;object-fit:contain;display:block;background:#fff;border-radius:8px;margin-bottom:8px}
+.product-card h3{font-size:15px;margin:8px 0}
+.price{font-weight:bold;color:#c8102e;margin:8px}
+button.action{background:#c8102e;color:white;border:0;border-radius:8px;padding:10px;font-weight:bold;cursor:pointer;width:100%}
+button.secondary{background:#333;color:white;border:0;border-radius:8px;padding:10px;cursor:pointer}
+.panel{background:white;padding:15px;border-radius:12px;margin-bottom:12px;box-shadow:0 2px 8px #ddd}
+input,textarea{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;margin:7px 0;font-size:15px}
+.item{display:flex;justify-content:space-between;gap:10px;align-items:center;background:white;padding:12px;margin-bottom:10px;border-radius:10px}
+.small-btn{border:0;border-radius:6px;background:#c8102e;color:white;padding:6px 10px;cursor:pointer}
+footer{text-align:center;padding:20px;color:#777;font-size:13px}
+.profile-photo{width:90px;height:90px;border-radius:50%;object-fit:cover;background:#eee;display:block;margin:10px auto}
+.empty{text-align:center;color:#777;padding:20px}
+@media(min-width:600px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 </style>
 </head>
 <body>
 
 <header>
 <h1>🥤 Coke Connect</h1>
-<p>Refresh. Connect. Enjoy.</p>
+<p>Refresh your day</p>
 </header>
 
 <nav>
@@ -41,112 +54,90 @@ h2{color:#c8102e}
 <button onclick="show('profile')">Profile</button>
 <button onclick="show('admin')">Admin</button>
 <button onclick="shareApp()">Share</button>
-<button onclick="location.reload()">CC</button>
+<button onclick="location.reload()">↻ Refresh</button>
 <button onclick="show('contact')">Contact</button>
 </nav>
 
 <main>
 
 <section id="home" class="active">
-<div class="card">
-<h2>Welcome to Coke Connect!</h2>
-<p>Discover and enjoy your favourite drinks.</p>
-<button onclick="show('explore')">Explore All Products</button>
+<div class="hero">
+<h2>Welcome to Coke Connect</h2>
+<p>Your favourite drinks, all in one place.</p>
+<button class="secondary" onclick="show('explore')">Explore Drinks</button>
 </div>
-
-<h2>Featured Drinks</h2>
-<div id="homeProducts"></div>
+<h3 class="section-title">Featured Drinks</h3>
+<div id="homeProducts" class="grid"></div>
 </section>
 
 <section id="explore">
-<h2>Our Products</h2>
-<div id="products"></div>
+<h2>Our Drinks</h2>
+<div id="products" class="grid"></div>
 </section>
 
 <section id="updates">
-<div class="card">
 <h2>Updates</h2>
-<p>Welcome to Coke Connect. Explore our demo products!</p>
+<div class="panel">
+<h3>Welcome to Coke Connect!</h3>
+<p>Explore drinks, add them to your cart and place demo orders.</p>
 </div>
 </section>
 
 <section id="cart">
 <h2>Your Cart</h2>
-<div id="cartContent"></div>
-<button onclick="checkout()">Place Demo Order</button>
+<div id="cartItems"></div>
+<div class="panel">
+<h3 id="cartTotal">Total: ₦0</h3>
+<button class="action" onclick="checkout()">Place Order</button>
+</div>
 </section>
 
 <section id="orders">
 <h2>Your Orders</h2>
-<div id="orderContent"></div>
+<div id="orderItems"></div>
 </section>
 
 <section id="rewards">
-<div class="card">
 <h2>Rewards</h2>
-<p>Your points: <strong id="points">0</strong></p>
+<div class="panel">
+<h3>Points: <span id="points">0</span></h3>
+<p>Place demo orders to earn points.</p>
 </div>
 </section>
 
 <section id="profile">
-<h2>Your Profile</h2>
-
-<div class="card" style="text-align:center">
-<img id="avatar" class="avatar" src="https://placehold.co/110x110?text=Profile" alt="Profile picture">
-<p>Change profile picture</p>
+<h2>Profile</h2>
+<div class="panel">
+<img id="photo" class="profile-photo" alt="Profile photo">
 <input type="file" accept="image/*" onchange="uploadPhoto(event)">
-</div>
-
-<div class="card">
-<h3>Account Information</h3>
-<p id="profileName">Name: Guest</p>
-<p id="profileEmail">Email: Not signed in</p>
-</div>
-
-<div class="card">
-<h3>Login</h3>
-<input id="loginEmail" type="email" placeholder="Enter your email">
-<button onclick="login()">Login</button>
-</div>
-
-<div class="card">
-<h3>Sign Up</h3>
-<input id="signupName" placeholder="Your name">
-<input id="signupEmail" type="email" placeholder="Your email">
-<button onclick="signup()">Create Demo Account</button>
-</div>
-
-<div class="card">
-<button onclick="logout()">Logout</button>
-<button onclick="saveProfile()">Save Profile</button>
+<div id="accountInfo"></div>
+<div id="accountForms"></div>
 </div>
 </section>
 
 <section id="admin">
-<div class="card">
-<h2>Demo Admin</h2>
-<p>Total demo orders: <span id="adminOrders">0</span></p>
-<p>Total cart items: <span id="adminCart">0</span></p>
-<button onclick="renderAll()">Refresh Summary</button>
+<h2>Admin Dashboard</h2>
+<div class="panel">
+<p>Total demo orders: <b id="adminOrders">0</b></p>
+<p>Earned points: <b id="adminPoints">0</b></p>
 </div>
+<div id="adminList"></div>
 </section>
 
 <section id="contact">
-<div class="card">
 <h2>Contact</h2>
+<div class="panel">
 <input id="contactName" placeholder="Your name">
-<input id="contactMessage" placeholder="Your message">
-<button onclick="contactSend()">Send Message</button>
+<input id="contactEmail" placeholder="Your email">
+<textarea id="contactMessage" placeholder="Your message"></textarea>
+<button class="action" onclick="contactSend()">Send Message</button>
 <p id="contactResult"></p>
 </div>
 </section>
 
 </main>
 
-<footer>
-<p>Coke Connect Demo App</p>
-<p>Independent demo, not an official Coca-Cola app.</p>
-</footer>
+<footer>Coke Connect · Independent demo app</footer>
 
 <script>
 const productsList=[
@@ -158,15 +149,21 @@ const productsList=[
 {id:6,name:"Water",price:500,img:"https://images.unsplash.com/photo-1601004890684-d8cbf643f5f2?auto=format&fit=crop&w=800&q=80"}
 ];
 
-function get(key,defaultValue){
-try{
-let value=localStorage.getItem(key);
-return value===null?defaultValue:JSON.parse(value);
-}catch(e){return defaultValue}
+let cart=JSON.parse(localStorage.getItem("cokeCart")||"[]");
+let orders=JSON.parse(localStorage.getItem("cokeOrders")||"[]");
+let points=Number(localStorage.getItem("cokePoints")||0);
+let account=JSON.parse(localStorage.getItem("cokeAccount")||"null");
+let session=JSON.parse(localStorage.getItem("cokeDemoSession")||"null");
+
+function save(){
+localStorage.setItem("cokeCart",JSON.stringify(cart));
+localStorage.setItem("cokeOrders",JSON.stringify(orders));
+localStorage.setItem("cokePoints",points);
+localStorage.setItem("cokeAccount",JSON.stringify(account));
+localStorage.setItem("cokeDemoSession",JSON.stringify(session));
 }
-function set(key,value){
-localStorage.setItem(key,JSON.stringify(value));
-}
+
+function money(n){return "₦"+Number(n).toLocaleString("en-NG")}
 
 function show(id){
 document.querySelectorAll("main section").forEach(s=>s.classList.remove("active"));
@@ -175,14 +172,11 @@ renderAll();
 }
 
 function productHTML(p){
-return `
-<div class="product">
-<img src="${p.img}" alt="${p.name}" loading="lazy"
-onerror="this.onerror=null;this.src='https://placehold.co/600x400?text=${encodeURIComponent(p.name)}'">
+return `<div class="product-card">
+<img src="${p.img}" alt="${p.name}" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/300x200/ffffff/c8102e?text=${encodeURIComponent(p.name)}'">
 <h3>${p.name}</h3>
-<p class="price">₦${p.price.toLocaleString()}</p>
-<button onclick="addCart(${p.id})">Add to Cart</button>
-<button onclick="orderNow(${p.id})">Order Now</button>
+<div class="price">${money(p.price)}</div>
+<button class="action" onclick="addCart(${p.id})">Add to Cart</button>
 </div>`;
 }
 
@@ -192,175 +186,151 @@ document.getElementById("homeProducts").innerHTML=productsList.map(productHTML).
 }
 
 function addCart(id){
-let cart=get("cokeCart",[]);
+let p=productsList.find(x=>x.id===id);
 let item=cart.find(x=>x.id===id);
 if(item)item.qty++;
-else cart.push({id,qty:1});
-set("cokeCart",cart);
-alert("Added to cart!");
-renderAll();
+else cart.push({id:p.id,name:p.name,price:p.price,qty:1});
+save();renderAll();alert(p.name+" added to cart!");
+}
+
+function changeQty(id,n){
+let item=cart.find(x=>x.id===id);
+if(!item)return;
+item.qty+=n;
+if(item.qty<=0)cart=cart.filter(x=>x.id!==id);
+save();renderAll();
+}
+
+function removeCart(id){
+cart=cart.filter(x=>x.id!==id);
+save();renderAll();
 }
 
 function renderCart(){
-let cart=get("cokeCart",[]);
-let box=document.getElementById("cartContent");
-if(!cart.length){box.innerHTML="<p>Your cart is empty.</p>";return;}
-let total=0;
-box.innerHTML="";
-cart.forEach(item=>{
-let p=productsList.find(x=>x.id===item.id);
-if(!p)return;
-total+=p.price*item.qty;
-box.innerHTML+=`
-<div class="card">
-<h3>${p.name}</h3>
-<p>Quantity: ${item.qty}</p>
-<p>₦${(p.price*item.qty).toLocaleString()}</p>
-<button onclick="changeQty(${p.id},1)">+</button>
-<button onclick="changeQty(${p.id},-1)">-</button>
-<button onclick="removeItem(${p.id})">Remove</button>
-</div>`;
-});
-box.innerHTML+=`<h3>Total: ₦${total.toLocaleString()}</h3>`;
+let box=document.getElementById("cartItems");
+if(!cart.length){
+box.innerHTML='<div class="empty">Your cart is empty.</div>';
+document.getElementById("cartTotal").textContent="Total: ₦0";
+return;
 }
-
-function changeQty(id,amount){
-let cart=get("cokeCart",[]);
-let item=cart.find(x=>x.id===id);
-if(item){
-item.qty+=amount;
-if(item.qty<=0)cart=cart.filter(x=>x.id!==id);
-}
-set("cokeCart",cart);
-renderAll();
-}
-
-function removeItem(id){
-set("cokeCart",get("cokeCart",[]).filter(x=>x.id!==id));
-renderAll();
+box.innerHTML=cart.map(x=>`
+<div class="item">
+<div><b>${x.name}</b><br>${money(x.price)} × ${x.qty}<br><b>${money(x.price*x.qty)}</b></div>
+<div>
+<button class="small-btn" onclick="changeQty(${x.id},-1)">−</button>
+<button class="small-btn" onclick="changeQty(${x.id},1)">+</button>
+<button class="small-btn" onclick="removeCart(${x.id})">Remove</button>
+</div>
+</div>`).join("");
+let total=cart.reduce((s,x)=>s+x.price*x.qty,0);
+document.getElementById("cartTotal").textContent="Total: "+money(total);
 }
 
 function checkout(){
-let cart=get("cokeCart",[]);
 if(!cart.length){alert("Your cart is empty.");return;}
-let orders=get("cokeOrders",[]);
-orders.push({items:cart,date:new Date().toLocaleString(),status:"Pending"});
-set("cokeOrders",orders);
-set("cokeCart",[]);
-set("cokePoints",get("cokePoints",0)+10);
-alert("Demo order placed!");
-renderAll();
+let order={id:Date.now(),items:cart.map(x=>({...x})),total:cart.reduce((s,x)=>s+x.price*x.qty,0),status:"Pending",date:new Date().toLocaleString()};
+orders.unshift(order);
+points+=Math.max(1,Math.floor(order.total/1000));
+cart=[];
+save();renderAll();alert("Demo order placed successfully!");
 show("orders");
 }
 
-function orderNow(id){
-set("cokeCart",[{id:id,qty:1}]);
-checkout();
+function renderOrders(){
+let box=document.getElementById("orderItems");
+if(!orders.length){box.innerHTML='<div class="empty">No orders yet.</div>';return;}
+box.innerHTML=orders.map(o=>`
+<div class="panel">
+<h3>Order #${String(o.id).slice(-6)}</h3>
+<p>${o.date}</p>
+${o.items.map(i=>`<p>${i.name} × ${i.qty} — ${money(i.price*i.qty)}</p>`).join("")}
+<p><b>Total: ${money(o.total)}</b></p>
+<p>Status: ${o.status}</p>
+</div>`).join("");
 }
 
-function renderOrders(){
-let orders=get("cokeOrders",[]);
-let box=document.getElementById("orderContent");
-if(!orders.length){box.innerHTML="<p>No orders yet.</p>";return;}
-box.innerHTML="";
-orders.forEach(o=>{
-let total=0;
-let names=[];
-o.items.forEach(i=>{
-let p=productsList.find(x=>x.id===i.id);
-if(p){total+=p.price*i.qty;names.push(p.name+" x "+i.qty);}
-});
-box.innerHTML+=`
-<div class="card">
-<p>${o.date}</p>
-<p>${names.join(", ")}</p>
-<p>Total: ₦${total.toLocaleString()}</p>
-<p>Status: ${o.status}</p>
-</div>`;
-});
+function renderRewards(){
+document.getElementById("points").textContent=points;
+}
+
+function renderProfile(){
+let photo=localStorage.getItem("cokePhoto");
+document.getElementById("photo").src=photo||"https://placehold.co/100x100?text=Profile";
+let info=document.getElementById("accountInfo");
+let forms=document.getElementById("accountForms");
+if(session&&account){
+info.innerHTML=`<h3>${account.name}</h3><p>${account.email}</p><button class="secondary" onclick="logout()">Logout</button>`;
+forms.innerHTML="";
+}else{
+info.innerHTML="<p>Login or create a demo account.</p>";
+forms.innerHTML=`
+<h3>Sign Up</h3>
+<input id="signupName" placeholder="Full name">
+<input id="signupEmail" placeholder="Email">
+<input id="signupPassword" type="password" placeholder="Password">
+<button class="action" onclick="signup()">Sign Up</button>
+<hr>
+<h3>Login</h3>
+<input id="loginEmail" placeholder="Email">
+<input id="loginPassword" type="password" placeholder="Password">
+<button class="action" onclick="login()">Login</button>`;
+}
 }
 
 function signup(){
 let name=document.getElementById("signupName").value.trim();
 let email=document.getElementById("signupEmail").value.trim();
-if(!name||!email){alert("Enter your name and email.");return;}
-set("cokeAccount",{name,email});
-set("cokeDemoSession",true);
-updateProfile();
-alert("Demo account created!");
+let password=document.getElementById("signupPassword").value;
+if(!name||!email||!password){alert("Fill all fields.");return;}
+account={name,email,password};
+session={email};
+save();renderAll();alert("Demo account created!");
 }
 
 function login(){
 let email=document.getElementById("loginEmail").value.trim();
-let account=get("cokeAccount",null);
-if(!account||account.email!==email){
-alert("Email not found. Create a demo account first.");
-return;
-}
-set("cokeDemoSession",true);
-updateProfile();
-alert("Logged in!");
+let password=document.getElementById("loginPassword").value;
+if(!account||account.email!==email||account.password!==password){alert("Incorrect email or password.");return;}
+session={email};save();renderAll();alert("Logged in!");
 }
 
 function logout(){
-set("cokeDemoSession",false);
-updateProfile();
-alert("Logged out.");
+session=null;save();renderAll();
 }
 
-function updateProfile(){
-let account=get("cokeAccount",null);
-let logged=get("cokeDemoSession",false);
-document.getElementById("profileName").textContent="Name: "+(logged&&account?account.name:"Guest");
-document.getElementById("profileEmail").textContent="Email: "+(logged&&account?account.email:"Not signed in");
-document.getElementById("avatar").src=get("cokePhoto","https://placehold.co/110x110?text=Profile");
-}
-
-function uploadPhoto(event){
-let file=event.target.files[0];
+function uploadPhoto(e){
+let file=e.target.files[0];
 if(!file)return;
-if(file.size>2*1024*1024){
-alert("Choose a picture under 2 MB.");
-event.target.value="";
-return;
-}
+if(file.size>2*1024*1024){alert("Choose an image under 2MB.");return;}
 let reader=new FileReader();
-reader.onload=function(){
-set("cokePhoto",reader.result);
-updateProfile();
-alert("Profile picture updated!");
-};
+reader.onload=()=>{localStorage.setItem("cokePhoto",reader.result);renderProfile();};
 reader.readAsDataURL(file);
 }
 
-function saveProfile(){
-updateProfile();
-alert("Profile updated.");
-}
-
-function renderRewards(){
-document.getElementById("points").textContent=get("cokePoints",0);
-}
-
 function renderAdmin(){
-document.getElementById("adminOrders").textContent=get("cokeOrders",[]).length;
-document.getElementById("adminCart").textContent=get("cokeCart",[]).reduce((sum,i)=>sum+i.qty,0);
+document.getElementById("adminOrders").textContent=orders.length;
+document.getElementById("adminPoints").textContent=points;
+document.getElementById("adminList").innerHTML=orders.map(o=>`
+<div class="panel">
+<b>Order #${String(o.id).slice(-6)}</b>
+<p>${money(o.total)}</p>
+<p>${o.status}</p>
+</div>`).join("")||'<div class="empty">No demo orders.</div>';
 }
 
 function contactSend(){
 let name=document.getElementById("contactName").value;
+let email=document.getElementById("contactEmail").value;
 let message=document.getElementById("contactMessage").value;
-if(!name||!message){alert("Enter your name and message.");return;}
-document.getElementById("contactResult").textContent="Demo message received.";
-document.getElementById("contactName").value="";
-document.getElementById("contactMessage").value="";
+if(!name||!email||!message){alert("Please fill all fields.");return;}
+document.getElementById("contactResult").textContent="Message saved for this demo. No message was sent to a real company.";
 }
 
 function shareApp(){
 if(navigator.share){
-navigator.share({title:"Coke Connect",text:"Check out Coke Connect!"});
+navigator.share({title:"Coke Connect",text:"Check out Coke Connect!",url:location.href}).catch(()=>{});
 }else{
-alert("Share Coke Connect with your friends!");
+prompt("Copy this app link:",location.href);
 }
 }
 
@@ -369,8 +339,8 @@ renderProducts();
 renderCart();
 renderOrders();
 renderRewards();
+renderProfile();
 renderAdmin();
-updateProfile();
 }
 
 renderAll();
